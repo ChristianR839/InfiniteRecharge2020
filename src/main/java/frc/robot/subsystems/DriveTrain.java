@@ -29,19 +29,25 @@ public class DriveTrain extends SubsystemBase
       */
 
     private WPI_TalonFX m_talonLeft1 = new WPI_TalonFX( Constants.CAN_DriveTrain_Left1 );
+    private WPI_TalonFX m_talonRight1 = new WPI_TalonFX( Constants.CAN_DriveTrain_Right1 );
 
     private final SpeedController leftSide  = new SpeedControllerGroup( m_talonLeft1,
                                                                         new WPI_TalonFX( Constants.CAN_DriveTrain_Left2  ));
-    private final SpeedController rightSide = new SpeedControllerGroup( new WPI_TalonFX( Constants.CAN_DriveTrain_Right1 ),
+    private final SpeedController rightSide = new SpeedControllerGroup( new WPI_TalonFX( m_talonRight1 ),
                                                                         new WPI_TalonFX( Constants.CAN_DriveTrain_Right2 ));
 
     private final DifferentialDrive drive = new DifferentialDrive( leftSide, rightSide );
 
     
 
-    public double getPosition()
+    public double getLeftPosition()
     {
-        return m_talonLeft1.getSelectedSensorPosition();
+        return (0.5*(m_talonLeft1.getSelectedSensorPosition() + m_talonRight1.getSelectedSensorPosition()));
+    }
+
+    public double getAvgPosition()
+    {
+        return (m_talonLeft1.getSelectedSensorPosition());
     }
 
     public DriveTrain() 
